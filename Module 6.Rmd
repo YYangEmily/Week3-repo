@@ -50,3 +50,88 @@ median(new$population, na.rm=TRUE)
 
 ## Challenge 2
 ```{r Challenge 2}
+par(mfrow = c(2, 3))
+attach(d)
+# https://sparkbyexamples.com/r-programming/remove-rows-with-na-in-r/#:~:text=Remove%20Rows%20with%20NA%20From,values)%20from%20R%20data%20frame.
+na.omit(d$population)
+na.omit(d$area)
+boxplot(d$population)
+boxplot(log(d$population))
+boxplot(d$area)
+boxplot(log(d$area))
+barplot(d$population)
+barplot(d$area)
+detach(d)
+```
+
+## Challenge 3
+
+```{r Challenge 3}
+par(mfrow = c(1, 2)) 
+attach(d)
+hist(log(population), freq = FALSE, col = "red", main = "Plot 1", xlab = "log(population size)",
+    ylab = "density", ylim = c(0, 0.2)) 
+hist(log(area), freq = FALSE, col = "blue", main = "Plot 2", xlab = "log(area)",
+    ylab = "density", ylim = c(0, 0.2))
+ abline(v=mean(log(population))) # I don't see the difference. Supposed to add mean pop line
+
+ par(mfrow = c(1, 1))  # set up one panel and redraw the log(population) histogram
+hist(log(population), freq = FALSE, col = "white", main = "My Plot with Mean and Density",
+    xlab = "log(population size)", ylab = "density", ylim = c(0, 0.2))
+abline(v = mean(log(population), na.rm = TRUE), col = "blue")
+lines(density(log(population), na.rm = TRUE), col = "green")
+detach(d)
+```
+
+## Challenge 4
+```{r Challenge 4}
+sort(table(d$govt_form), decreasing = TRUE)
+```
+
+## Challenge 5
+```{r Challenge 5}
+m <- curl("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/master/AN588_Fall23/KamilarAndCooperData.csv")
+n <- read.csv(m, header = TRUE, stringsAsFactors = FALSE)
+attach(n)
+head(n)
+summary(n)
+boxplot(log(Body_mass_female_mean) ~ Family, n)
+
+
+library(ggplot2)
+p <- ggplot(data = n, aes(x = Family, y = log(Body_mass_female_mean)))  #define the variables
+p <- p + geom_boxplot()  #graph them in a boxplot
+p <- p + theme(axis.text.x = element_text(angle = 90))  #put x-axis names at 90deg
+p <- p + ylab("log(Female Body Mass)")  #rename y-axis title
+p  #show me the graph
+
+detach(n)
+```
+
+## Challenge 6
+
+Make a scatter plot and also learn to add labels when not in ggplot.<br> https://www.tutorialkart.com/r-tutorial/r-plot-x-y-labels/#gsc.tab=0
+``` {r Challenge 6}
+attach(n)
+par(mfrow = c(1, 2))
+plot(x = Body_mass_female_mean, y = Brain_Size_Female_Mean, xlab="Brain Size Female Mean", ylab="Body Mass Female Mean") 
+plot(x = log(Body_mass_female_mean), y = log(Brain_Size_Female_Mean), xlab="Log Brain Size Female Mean", ylab="Log Body Mass Female Mean") 
+detach(n)
+
+p <- ggplot(data = n, aes(x = log(Body_mass_female_mean), y = log(Brain_Size_Female_Mean),
+    color = factor(Family)))  # first, we build a plot object and color points by Family
+p <- p + xlab("log(Female Body Mass)") + ylab("log(Female Brain Size)")  # then we modify the axis labels
+p <- p + geom_point()  # then we make a scatterplot
+p <- p + theme(legend.position = "bottom", legend.title = element_blank())  # then we modify the legend
+p  # and, finally, we plot the object
+p <- p + facet_wrap(~Family, ncol = 4)
+p <- p + theme(legend.position = "none")
+p
+p <- p + geom_smooth(method = "lm", fullrange = TRUE)
+p
+```
+
+``` {r Challenge 7}
+
+
+```

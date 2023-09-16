@@ -2,8 +2,7 @@
 title: "Module 6"
 author: "Emily Yang"
 date: "`r Sys.Date()`"
-output: 
- 
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -51,12 +50,3 @@ median(new$population, na.rm=TRUE)
 
 ## Challenge 2
 ```{r Challenge 2}
-par(mfrow = c(2, 3)) 
-boxplot(d$population, na.action(d$population, omit))
-boxplot(log(d$population, na.action(d$population, omit))
-boxplot(d$area, na.action(d$area, omit))
-boxplot(log(d$area), na.action(d$area, omit))
-barplot(d$population, na.action(d$population, omit))
-barplot(d$area)
-
-```

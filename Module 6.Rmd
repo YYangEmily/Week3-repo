@@ -1,0 +1,62 @@
+---
+title: "Module 6"
+author: "Emily Yang"
+date: "`r Sys.Date()`"
+output: 
+ 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exploratory Data Analysis
+
+## Challenge 1
+```{r Challenge 1}
+library(curl)
+f <- curl("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/master/AN588_Fall23/Country-Data-2016.csv")
+d <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+head(d) # First 6 rows
+summary(d) # summary of each of the columns
+names(d) # column names
+# median area. Area 3rd column 
+median(d[,c(3)], na.rm=TRUE)
+# median population size. Pop size 2nd column 
+median(d[,c(2)], na.rm=TRUE)
+
+d$density <- d$population/d$area #use $ or it won't be a new column 
+d <- d[order(-d$density), ] #order highest to lowest
+d[1:10, ] # first 10 of d
+
+d <- d[order(d$density), ] #order lowest to highest
+d[1:10, ]
+
+#Separate out the largest 20 countries
+d <- d[order(-d$area), ] # Order by area from largest to smallest
+size <- d[1:20, ] #New object with only the first 20 
+summary(size)
+# median area
+median(size$area, na.rm=TRUE)
+# median population size
+median(size$population, na.rm=TRUE)
+
+#Separate out the countries starting A-F
+new <- d[grep("^[A-F]", d$country), ] # grep() search for matches of a pattern. ^ = first word. A-F = capital A-F  
+summary(new)
+median(new$area, na.rm=TRUE)
+# median population size
+median(new$population, na.rm=TRUE)
+```
+
+## Challenge 2
+```{r Challenge 2}
+par(mfrow = c(2, 3)) 
+boxplot(d$population, na.action(d$population, omit))
+boxplot(log(d$population, na.action(d$population, omit))
+boxplot(d$area, na.action(d$area, omit))
+boxplot(log(d$area), na.action(d$area, omit))
+barplot(d$population, na.action(d$population, omit))
+barplot(d$area)
+
+```

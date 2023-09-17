@@ -52,15 +52,12 @@ median(new$population, na.rm=TRUE)
 ```{r Challenge 2}
 par(mfrow = c(2, 3))
 attach(d)
-# https://sparkbyexamples.com/r-programming/remove-rows-with-na-in-r/#:~:text=Remove%20Rows%20with%20NA%20From,values)%20from%20R%20data%20frame.
-na.omit(d$population)
-na.omit(d$area)
-boxplot(d$population)
-boxplot(log(d$population))
-boxplot(d$area)
-boxplot(log(d$area))
-barplot(d$population)
-barplot(d$area)
+boxplot(d$population, na.rm = TRUE)
+boxplot(log(d$population), na.rm = TRUE)
+boxplot(d$area, na.rm = TRUE)
+boxplot(log(d$area), na.rm = TRUE)
+barplot(d$population, na.rm = TRUE)
+barplot(d$area, na.rm = TRUE)
 detach(d)
 ```
 
@@ -132,6 +129,40 @@ p
 ```
 
 ``` {r Challenge 7}
+p <- ggplot(data = n, aes(x = log(Body_mass_female_mean), y = log(MaxLongevity_m)))
+p <- p + geom_point()
+p <- p + geom_smooth(method = "lm")
+p
+aggregate(n$Body_mass_female_mean ~ n$Family, FUN = "mean", na.rm = TRUE)
+library(dplyr)
+s <- filter(n, Family == "Hominidae" & Mass_Dimorphism > 2)
+head(s)
+s <- arrange(n, Family, Genus, Body_mass_male_mean)  # rearranging a data frame...
+head(s)
+s <- select(n, Family, Genus, Body_mass_male_mean)  # selecting specific columns...
+head(s)
+s <- rename(n, Female_Mass = Body_mass_female_mean)
+head(s$Female_Mass)  # renaming columns...
+s <- mutate(n, Binomial = paste(Genus, Species, sep = " "))
+head(s$Binomial)  # and adding new columns...
+```
 
+## Challenge 8
+Learn how to pipe
+``` {r Challenge 8}
+library(dplyr)
+s <-                                                  #to create dataframe "s"
+  n %>%                                                    #take dataframe "n"
+group_by(Family) %>%                                        #Group it by Family
+summarise(avgF = mean(Body_mass_female_mean, na.rm=TRUE),  #calculate mean male BM
+avgM = mean(Body_mass_male_mean, na.rm=TRUE))        #And mean female BM
+s
+
+s <- n %>%
+    mutate(Binomial = paste(Genus, Species, sep = " ")) %>%
+    select(Binomial, Body_mass_female_mean, Body_mass_male_mean, Mass_Dimorphism) %>%
+    group_by(Binomial) %>%
+    summarise(avgF = mean(Body_mass_female_mean, na.rm = TRUE), avgM = mean(Body_mass_male_mean,
+        na.rm = TRUE), avgBMD = mean(Mass_Dimorphism, na.rm = TRUE))
 
 ```

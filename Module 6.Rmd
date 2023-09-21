@@ -50,14 +50,16 @@ median(new$population, na.rm=TRUE)
 
 ## Challenge 2
 ```{r Challenge 2}
-par(mfrow = c(2, 3))
+par(mfrow = c(2, 3)) # tells R that all the graphs go in one image and how many rows and columns of it. 
 attach(d)
-boxplot(d$population, na.rm = TRUE)
-boxplot(log(d$population), na.rm = TRUE)
-boxplot(d$area, na.rm = TRUE)
-boxplot(log(d$area), na.rm = TRUE)
-barplot(d$population, na.rm = TRUE)
-barplot(d$area, na.rm = TRUE)
+na.omit(d$population)
+na.omit(d$area)
+boxplot(d$population)
+boxplot(log(d$population))
+boxplot(d$area)
+boxplot(log(d$area))
+barplot(d$population)
+barplot(d$area)
 detach(d)
 ```
 
@@ -68,9 +70,11 @@ par(mfrow = c(1, 2))
 attach(d)
 hist(log(population), freq = FALSE, col = "red", main = "Plot 1", xlab = "log(population size)",
     ylab = "density", ylim = c(0, 0.2)) 
+    abline(v = mean(log(population), na.rm = TRUE), col = "blue")
+    
 hist(log(area), freq = FALSE, col = "blue", main = "Plot 2", xlab = "log(area)",
     ylab = "density", ylim = c(0, 0.2))
- abline(v=mean(log(population))) # I don't see the difference. Supposed to add mean pop line
+ abline(v = mean(log(area), na.rm = TRUE), col = "green")# Adding mean area line
 
  par(mfrow = c(1, 1))  # set up one panel and redraw the log(population) histogram
 hist(log(population), freq = FALSE, col = "white", main = "My Plot with Mean and Density",
@@ -92,11 +96,11 @@ n <- read.csv(m, header = TRUE, stringsAsFactors = FALSE)
 attach(n)
 head(n)
 summary(n)
-boxplot(log(Body_mass_female_mean) ~ Family, n)
+boxplot(log(Body_mass_female_mean) ~ Family, n) # anything ~ anything tells which rows to compare
 
 
 library(ggplot2)
-p <- ggplot(data = n, aes(x = Family, y = log(Body_mass_female_mean)))  #define the variables
+p <- ggplot(data = n, aes(x = Family, y = log(Body_mass_female_mean)))  #define the variables. aes means aesthetics 
 p <- p + geom_boxplot()  #graph them in a boxplot
 p <- p + theme(axis.text.x = element_text(angle = 90))  #put x-axis names at 90deg
 p <- p + ylab("log(Female Body Mass)")  #rename y-axis title
@@ -116,24 +120,28 @@ plot(x = log(Body_mass_female_mean), y = log(Brain_Size_Female_Mean), xlab="Log 
 detach(n)
 
 p <- ggplot(data = n, aes(x = log(Body_mass_female_mean), y = log(Brain_Size_Female_Mean),
-    color = factor(Family)))  # first, we build a plot object and color points by Family
+    color = factor(Family)))  # first, we build a plot object and color points by Family. Needs to be a factor if its a character. Factor group identical charaacters.
 p <- p + xlab("log(Female Body Mass)") + ylab("log(Female Brain Size)")  # then we modify the axis labels
 p <- p + geom_point()  # then we make a scatterplot
 p <- p + theme(legend.position = "bottom", legend.title = element_blank())  # then we modify the legend
 p  # and, finally, we plot the object
-p <- p + facet_wrap(~Family, ncol = 4)
+# look at each family to find intra family differences
+p <- p + facet_wrap(~Family, ncol = 4) 
 p <- p + theme(legend.position = "none")
 p
-p <- p + geom_smooth(method = "lm", fullrange = TRUE)
+p <- p + geom_smooth(method = "lm", fullrange = TRUE) # lm = linear model. full range=TRUE telling it to draw the line across the entire graph.
 p
 ```
 
 ``` {r Challenge 7}
+attach(n)
 p <- ggplot(data = n, aes(x = log(Body_mass_female_mean), y = log(MaxLongevity_m)))
 p <- p + geom_point()
 p <- p + geom_smooth(method = "lm")
 p
+
 aggregate(n$Body_mass_female_mean ~ n$Family, FUN = "mean", na.rm = TRUE)
+
 library(dplyr)
 s <- filter(n, Family == "Hominidae" & Mass_Dimorphism > 2)
 head(s)
@@ -145,6 +153,18 @@ s <- rename(n, Female_Mass = Body_mass_female_mean)
 head(s$Female_Mass)  # renaming columns...
 s <- mutate(n, Binomial = paste(Genus, Species, sep = " "))
 head(s$Binomial)  # and adding new columns...
+
+s <- summarise(d, avgF = mean(Body_mass_female_mean, na.rm = TRUE), avgM = mean(Body_mass_male_mean,
+    na.rm = TRUE))
+s
+
+s <-                                                             #to create dataframe "s"
+  d %>%                                                          #take dataframe "d"
+  group_by(Family) %>%                                           #Group it by Family
+  summarise(avgF = mean(Body_mass_female_mean, na.rm=TRUE),      #And calculate mean male BM
+            avgM = mean(Body_mass_male_mean, na.rm=TRUE))        #And mean female BM
+s
+detach(n)
 ```
 
 ## Challenge 8

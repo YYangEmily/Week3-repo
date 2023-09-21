@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 ## Challenge 1
 ```{r Challenge 1}
-x <- c(1,2,3,4,5,6,7,8,9,10,100,1000)
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 25, 50, 100, 200, 1000)
 gm1 <- function(x) {
     prod(x)^(1/length(x))
 }
@@ -36,7 +36,7 @@ gm3(x)
 ```{r Challenge 2}
 ## 2 ways to calculate sum of squares
 ss1 <- function(x) {
-    sum((x - mean(x))^2)
+    sum((x - mean(x))^2) # how far is each value of x away from the mean value of x. Square it and add all together.
 }
 ss1(x)
 
@@ -101,5 +101,11 @@ se(x)
 
 ## Challenge 5
 ```{r Challenge 5}
-knitr::opts_chunk$set(echo = TRUE)
+set.seed(1)
+x <- rnorm(10000, 0, 1)
+hist(x)
+
+x <- seq(from = -4, to = 4, by = 0.01)
+plot(x, dnorm(x), cex = 0.4)
+
 ```

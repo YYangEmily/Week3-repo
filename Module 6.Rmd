@@ -135,6 +135,7 @@ p
 
 ``` {r Challenge 7}
 attach(n)
+library(ggplot2)
 p <- ggplot(data = n, aes(x = log(Body_mass_female_mean), y = log(MaxLongevity_m)))
 p <- p + geom_point()
 p <- p + geom_smooth(method = "lm")
@@ -159,7 +160,7 @@ s <- summarise(d, avgF = mean(Body_mass_female_mean, na.rm = TRUE), avgM = mean(
 s
 
 s <-                                                             #to create dataframe "s"
-  d %>%                                                          #take dataframe "d"
+  n %>%                                                          #take dataframe "n"
   group_by(Family) %>%                                           #Group it by Family
   summarise(avgF = mean(Body_mass_female_mean, na.rm=TRUE),      #And calculate mean male BM
             avgM = mean(Body_mass_male_mean, na.rm=TRUE))        #And mean female BM
@@ -184,5 +185,17 @@ s <- n %>%
     group_by(Binomial) %>%
     summarise(avgF = mean(Body_mass_female_mean, na.rm = TRUE), avgM = mean(Body_mass_male_mean,
         na.rm = TRUE), avgBMD = mean(Mass_Dimorphism, na.rm = TRUE))
+s
+```
 
+## Final Problems
+Acccording to Kamilar & Cooper’s (2013) dataset, what is the average male and female size, and body mass dimorphism of my two main study species (vervet monkeys, Chlorocebus pygerythrus; and woolly monkeys, Lagothrix lagotricha)? Which has a larger average female body mass? Which is more sexually dimorphic?<br>
+Compare the body size of my two main study taxa at the Family level (i.e., Cercopithecidae vs. Atelidae) by plotting (using {ggplot2}) the body mass of males and females and sexual dimorphism. If you can, make the Cercopithecid boxes green, and the Atelid boxes purple.
+``` {Challenge 8 Problems}
+s <- n %>%
+    mutate(Binomial = paste(Genus, Species, sep = " ")) %>%
+    select(Binomial, Body_mass_female_mean, Body_mass_male_mean, Mass_Dimorphism) %>%
+  filter{Binomial = "Chlorocebus pygerythrus"| Binomial = "Lagothrix lagotricha"}
+
+s
 ```

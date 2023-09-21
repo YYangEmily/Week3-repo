@@ -1,0 +1,17 @@
+---
+title: "Testing"
+author: "Emily Yang"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Average}
+m <- matrix(data= c(24, 21, 20, 25, 17, 20, 12, 17, 19, 18, 19, 25, 20, 28, 17, 17, 16, 10, 16, 13, 28, 19, 23, 24), nrow = 3, ncol = 8, byrow = FALSE)
+m
+colMeans(m)
+
+```

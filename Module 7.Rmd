@@ -71,4 +71,35 @@ for (n in seq(5, 50, 5)) # samples of 5, 10, 15... 15...
         points(n, var(x))
     }
 }
+# population standard deviation
+pop_sd <- function(x) {
+    sqrt(pop_v(x))
+}
+pop_sd(x)
+# sample standard deviation
+sample_sd <- function(x) {
+    sqrt(sample_v(x))
+}
+sample_sd(x)
 ``` 
+## Challenge 4
+```{r Challenge 4}
+# standard error of mean
+SE1 <- function(x) {
+    sqrt(sample_v(x)/length(x))
+}
+SE1(x)
+# also standard error of mean
+SE2 <- function(x) {
+    sqrt(var(x)/length(x))
+}
+SE2(x)
+# built in function
+library(sciplot)
+se(x)
+```
+
+## Challenge 5
+```{r Challenge 5}
+knitr::opts_chunk$set(echo = TRUE)
+```

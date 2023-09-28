@@ -107,12 +107,12 @@ x <- rnorm(10000, 0, 1)
 hist(x)
 
 x <- seq(from = -4, to = 4, by = 0.01)
-plot(x, dnorm(x), cex = 0.4)
+plot(x, dnorm(x), cex = 0.4) #Cumulative value at zero. 
 
-plot(x, pnorm(x), cex = 0.4)
+plot(x, pnorm(x), cex = 0.4) #Cumulative probability.Keep adding probability of getting 4 or anything less than 4
 
-x <- seq(from = 0, to = 1, by = 0.01)
-plot(qnorm(x), x, cex = 0.4)
+x <- seq(from = 0, to = 1, by = 0.01) #set from 0-1 by 0.1
+plot(qnorm(x), x, cex = 0.4) #cex = set size of of x qnorm = opposite of pnorm reciprocol
 
 x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15)
 m <- mean(x)
@@ -125,4 +125,20 @@ upper <- mean(x) + qnorm(0.975, mean = 0, sd = 1) * se(x)
 lower <- mean(x) + qnorm(0.025, mean = 0, sd = 1) * se(x)  # or lower <- mean(x) - qnorm(0.975)*se(x)
 ci <- c(lower, upper)
 ci
+
+ normalCI = function(x, CIlevel = 0.95) {
+    upper = m + qnorm(1 - (1 - CIlevel)/2) * sqrt(var(x)/length(x))
+    lower = m + qnorm((1 - CIlevel)/2) * sqrt(var(x)/length(x))
+    ci <- c(lower, upper)
+    return(ci)
+}
+normalCI(x, 0.95)  # call the function
+
+set <- NULL  # sets up a dummy variable to hold our 10000 simulations
+n <- 15
+for (i in 1:10000) {
+    set[i] <- mean(sample(x, n, replace = TRUE))
+}
+quantile(set)
+quantile(set, c(0.025, 0.975))
 ```
